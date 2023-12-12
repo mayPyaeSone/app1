@@ -1,14 +1,33 @@
 import React,{Component} from "react";
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import WithNavigation from "./WithNavigation";   
+import WithParams from "./WithParams";
 class TodoApp extends Component{
     render(){
+        const LoginComponentWithNavigation = WithNavigation(LoginComponent);
+        const WelcomeComponentWithParams = WithParams(WelcomeComponent);
         return(
             <div className="TodoApp">
-            <LoginComponent/> 
-                </div>
+            <Router>
+            <Routes>
+                <Route path="/" element={<LoginComponentWithNavigation />} />
+                <Route path="/login" element={<LoginComponentWithNavigation />} />
+                <Route path="/welcome/:name" element={<WelcomeComponentWithParams />} />
+                <Route path="*" element={<ErrorComponent />} />
+            </Routes>
+        </Router>
+            </div>
         );
     }
 
+}
+class WelcomeComponent extends Component{
+    render(){
+        return <div>Welcome {this.props.params.name}</div>
+    }
+}
+function ErrorComponent() {
+    return <div>An Error Occurred. I don't know what to do! Contact support at abcd-efgh-ijkl</div>
 }
 class LoginComponent extends Component{
     constructor(props){
@@ -33,12 +52,13 @@ class LoginComponent extends Component{
     }
     loginClicked(props){
         //in28minutes, dummy
-        if(this.state.username === 'in28minutes' && this.state.password==='dummy') { 
-          
-              console.log('Successful');
-              this.setState({showSuccessMessage:true})
-              this.setState({hasLoginFailed: false})
-           }else{
+        if(this.state.username === 'in28minutes' && this.state.password==='dummy') {   
+        {/*console.log('Successful');
+        this.setState({showSuccessMessage:true})
+        this.setState({hasLoginFailed: false})*/}
+        {/* this.props.history.push(`/welcome/${this.state.username}`)*/}
+        this.props.navigate(`/welcome/${this.state.username}`)
+        }else{
             this.setState({showSuccessMessage:false})
             this.setState({hasLoginFailed: true})
            }
