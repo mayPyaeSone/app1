@@ -82,37 +82,44 @@ class ListTodoComponent extends Component{
        return (
         <div>
             <h1>List Todos</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>description</th>
-                        <th>Is Completed</th>
-                        <th>Target Date</th>
-                    </tr>
-                </thead>
-            <tbody>
-               {
-                this.state.todos.map(
-                    todo =>
-                    <tr>
-                        <td>{todo.id}</td>
-                        <td>{todo.description}</td>
-                        <td>{todo.done.toString()}</td>
-                        <td>{todo.targetDate.toString()}</td>
-                    </tr>
-                )
-               }
-            </tbody>
-            </table>
+            <div class="container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>description</th>
+                            <th>Is Completed</th>
+                            <th>Target Date</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                {
+                    this.state.todos.map(
+                        todo =>
+                        <tr>
+                            <td>{todo.id}</td>
+                            <td>{todo.description}</td>
+                            <td>{todo.done.toString()}</td>
+                            <td>{todo.targetDate.toString()}</td>
+                        </tr>
+                    )
+                }
+                </tbody>
+                </table>
+            </div>
         </div>
        )
     }
 }
 class WelcomeComponent extends Component{
     render(){
+        <Route path="/logout" element={<LogoutComponent />} />
         return (
-            <div>Welcome {this.props.params.name}. You can manage your todos <Link to="/todos">here</Link></div> 
+            <> 
+                <h1>Welcome</h1>
+                <div className="container">Welcome {this.props.params.name}. You can manage your todos <Link to="/todos">here</Link></div> 
+            </>
+           
             )
     }
 }
