@@ -4,8 +4,9 @@ import SecondComponet from './components/learning-examples/SecondComponet';
 import  ThirdComponent from './components/learning-examples/ThirdComponent';
 import TodoApp from "./components/todo/TodoApp";
 import Counter from './components/counter/Counter';
-// import './components/counter/Counter.css';
 import './App.css';
+import './bootstrap.css';
+
 //Root Component
 class App extends Component { 
    name = 'moe'
@@ -19,6 +20,7 @@ class App extends Component {
     );
   }
 }
+
 class LearningComponent extends Component{
   render(){
     return(
