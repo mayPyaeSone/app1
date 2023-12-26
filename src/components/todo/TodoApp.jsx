@@ -2,14 +2,16 @@ import React,{Component} from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import WithNavigation from "./WithNavigation";    
 import WithParams from "./WithParams";
+import AuthenticationService from "./AuthenticationService.js";
 class TodoApp extends Component{
     render(){
         const LoginComponentWithNavigation = WithNavigation(LoginComponent);
+        const HeaderComponentWithNavigation = WithNavigation(HeaderComponent);
         const  WelcomeComponentWithParams = WithParams(WelcomeComponent);
         return(
             <div className="TodoApp">
             <Router>
-            <HeaderCompoment/>
+            <HeaderComponentWithNavigation/>
             <Routes>
                 <Route path="/" element={<LoginComponentWithNavigation />} />
                 <Route path="/login" element={<LoginComponentWithNavigation />} />
@@ -25,19 +27,21 @@ class TodoApp extends Component{
     }
 
 }
-class HeaderCompoment extends Component{
+class HeaderComponent extends Component{
     render(){
+        const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+        console.log(isUserLoggedIn);
         return (
             <header>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                 <div><a href="http://www.in28minutes.com" className="navbar-brand">in28minutes</a></div>
                 <ul className="navbar-nav">
-                    <li className="nav-link"><Link to="/welcome/in28minutes">Home</Link></li>
-                    <li className="nav-link"><Link to="/todos">Todos</Link></li>
+                    { isUserLoggedIn && <li className="nav-link"><Link to="/welcome/in28minutes">Home</Link></li>}
+                    { isUserLoggedIn && <li className="nav-link"><Link to="/todos">Todos</Link></li>}
                 </ul>
                 <ul className="navbar-nav navbar-collapse justify-content-end">
-                    <li className="nav-link"><Link to="/login">Login</Link></li>
-                    <li className="nav-link"><Link to="/logout">Logout</Link></li>
+                    { !isUserLoggedIn && <li className="nav-link"><Link to="/login">Login</Link></li>}
+                {isUserLoggedIn &&<li className="nav-link" ><Link to="/logout" onClick={AuthenticationService.logout}>Logout</Link></li>}
                  </ul>
                 </nav>
             </header>
@@ -150,11 +154,8 @@ class LoginComponent extends Component{
     loginClicked(props){
         //in28minutes, dummy
         if(this.state.username === 'in28minutes' && this.state.password==='dummy') {   
-        {/*console.log('Successful');
-        this.setState({showSuccessMessage:true})
-        this.setState({hasLoginFailed: false})*/}
-        {/* this.props.history.push(`/welcome/${this.state.username}`)*/}
-        this.props.navigate(`/welcome/${this.state.username}`)
+            AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+            this.props.navigate(`/welcome/${this.state.username}`)
         }else{
             this.setState({showSuccessMessage:false})
             this.setState({hasLoginFailed: true})
